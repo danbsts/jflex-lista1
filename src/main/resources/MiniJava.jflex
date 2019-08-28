@@ -46,10 +46,12 @@ digit2          = [0-9]
 integer         = {digit}({digit2})
 alphanumeric    = {letter}|{digit}
 identifier      = {letter}({alphanumeric})*
-whitespace      = [ \n \t \r \f]
+whitespace      = [ \n\t\r\f]
 reservado       = "boolean"|"class"|"public"|"extends"|"static"|"void"|"main"|"String"|"int"|"while"|"if"|"else"|"return"|"length"|"true"|"false"|"this"|"new"|"System.out.println"
 operators       = "&&" | "<" | "==" | "!=" | "+" | "-" | "*" | "!"
 delimitadores   = ";" | "." | "," | "=" | "(" | "{" |"[" | ")" | "}" |"]"
+comment         = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
+identificador   = ({letter} | _ )({letter} | _ | {digit2})*
 
 
 %%
@@ -80,34 +82,15 @@ System.out.println { System.out.println("token gerado foi um reservado: '" + yyt
 
 
 /* operators */
-/*"&&"            { System.out.println(""); }
-"<"             { System.out.println(""); }
-"=="            { System.out.println(""); }
-"!="            { System.out.println(""); }
-"+"             { System.out.println(""); }
-"-"             { System.out.println(""); }
-"*"             { System.out.println(""); }
-"!"             { System.out.println(""); }*/
-{operators}  { System.out.println("token gerado foi um reservado: '" + yytext() + "' na linha: " + yyline + ", coluna: " + yycolumn); }
+{operators}  { System.out.println("token gerado foi um operador: '" + yytext() + "' na linha: " + yyline + ", coluna: " + yycolumn); }
 
 
 /* delimitadores */
-{delimitadores} { System.out.println("token gerado foi um reservado: '" + yytext() + "' na linha: " + yyline + ", coluna: " + yycolumn); }
-/*"/"             { System.out.println("Token /"); }
-"("             { System.out.println("Token ("); }
-")"             { System.out.println("Token )"); }
-";"             { System.out.println("Token )"); }
-"."             { System.out.println("Token )"); }
-","             { System.out.println("Token )"); }
-"="             { System.out.println("Token )"); }
-"["             { System.out.println("Token )"); }
-"{"             { System.out.println("Token huyadgfaskgas"); }
-"]"             { System.out.println("Token )"); }
-"}"             { System.out.println("Token )"); }*/
+{delimitadores} { System.out.println("token gerado foi um delimitador: '" + yytext() + "' na linha: " + yyline + ", coluna: " + yycolumn); }
 
 
-{identifier}    { qtdeID++; System.out.println("Token ID ("+yytext()+")"); }
+{identificador} { System.out.println("token gerado foi um id: '" + yytext() + "' na linha: " + yyline + ", coluna: " + yycolumn); }
 {integer}       { System.out.println("Token INT ("+yytext()+")"); }
-/*{whitespace}    { /* Ignorar whitespace. */ }*/
+{whitespace}    { }
 .               { System.out.println("Illegal char, '" + yytext() +
                     "' line: " + yyline + ", column: " + yycolumn); }
