@@ -18,12 +18,10 @@ e a coluna atual com yycolumn.
 /*-*
  * PADROES NOMEADOS:
  */
-letter          = [A-Za-z]
+letter          = [A-Za-z] | "_"
 digit           = [1-9]
 digit2          = [0-9]
-integer         = {digit}({digit2})*
-alphanumeric    = {letter}|{digit}
-identifier      = {letter}({alphanumeric})*
+integer         = {digit2}+
 whitespace      = [ \n\t\r\f]
 reservado       = "boolean"|"class"|"public"|"extends"|"static"|"void"|"main"|"String"|"int"|"while"|"if"|"else"|"return"|"length"|"true"|"false"|"this"|"new"|"System.out.println"
 operators       = "&&" | "<" | "==" | "!=" | "+" | "-" | "*" | "!"
@@ -35,14 +33,13 @@ EndOfLineComment = "//" {InputCharacter}* {LineTerminator}?
 DocumentationComment = "/**" {CommentContent} "*"+"/"
 CommentContent   = ( [^*] | \*+ [^/*] )*
 comment         = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
-identificador   = ({letter} | _ )({letter} | _ | {digit2})*
+identificador   = ({letter})({letter} | {digit2})*
 
 
 %%
 /**
  * REGRAS LEXICAS:
  */
-{comment}       { }
 
  /* reservado */
 {reservado}     { System.out.println("token gerado foi um reservado: '" + yytext() + "' na linha: " + yyline + ", coluna: " + yycolumn); }
@@ -55,6 +52,5 @@ identificador   = ({letter} | _ )({letter} | _ | {digit2})*
 
 {identificador} { System.out.println("token gerado foi um id: '" + yytext() + "' na linha: " + yyline + ", coluna: " + yycolumn); }
 {integer}       { System.out.println("token gerado foi um integer: '"+yytext()+"' na linha: "+yyline+", coluna: "+yycolumn); }
+{comment}       { }
 {whitespace}    { }
-.               { System.out.println("Illegal char, '" + yytext() +
-                    "' line: " + yyline + ", column: " + yycolumn); }
